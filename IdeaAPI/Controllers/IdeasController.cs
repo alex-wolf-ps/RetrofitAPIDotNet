@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace IdeaAPI.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("[controller]")]
     public class IdeasController : Controller
     {
         private static List<Idea> ideas = new List<Idea>()
