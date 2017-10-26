@@ -82,7 +82,7 @@ namespace IdeaAPI.Controllers
 
             newIdea.Id = newMaxId;
             ideas.Add(newIdea);
-            return StatusCode(201);
+            return CreatedAtRoute("Get", new { id = newIdea.Id }, newIdea);
         }
 
         // PUT api/values/5
@@ -90,6 +90,11 @@ namespace IdeaAPI.Controllers
         public IActionResult Put(Idea updateIdea)
         {
             var idea = ideas.FirstOrDefault(x => x.Id == updateIdea.Id);
+            if(idea == null)
+            {
+                return NotFound();
+            }
+
             idea.Name = updateIdea.Name;
             idea.Owner = updateIdea.Owner;
             idea.Status = updateIdea.Status;
@@ -103,6 +108,11 @@ namespace IdeaAPI.Controllers
         public IActionResult Delete(int id)
         {
             var idea = ideas.FirstOrDefault(x => x.Id == id);
+            if(idea == null)
+            {
+                return NotFound();
+            }
+
             ideas.Remove(idea);
             return StatusCode(204);
         }
