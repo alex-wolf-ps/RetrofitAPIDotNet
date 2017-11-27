@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
+using System.Diagnostics;
+using System.Threading;
 
 namespace IdeaAPI.Controllers
 {
@@ -14,15 +16,15 @@ namespace IdeaAPI.Controllers
                 new Idea()
                 {
                     Id = 1,
-                    Name = "New issue tracking system",
+                    Name = "Hello from the server!",
                     Description = "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce accumsan quis justo quis hendrerit. Curabitur a ante neque. Fusce nec mauris sodales, auctor sem at, luctus eros. Praesent aliquam nibh neque. Duis ut suscipit justo, id consectetur orci. Curabitur ultricies nunc eu enim dignissim, sed laoreet odio blandit.",
-                    Status = "Idea",
-                    Owner = "Bob"
+                    Status = "idea",
+                    Owner = "Jim"
                 },
                 new Idea()
                 {
                     Id = 2,
-                    Name = "Revamp build scripts",
+                    Name = "Migrate to the Cloud",
                     Description = "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce accumsan quis justo quis hendrerit. Curabitur a ante neque. Fusce nec mauris sodales, auctor sem at, luctus eros. Praesent aliquam nibh neque. Duis ut suscipit justo, id consectetur orci. Curabitur ultricies nunc eu enim dignissim, sed laoreet odio blandit.",
                     Status = "Started",
                     Owner = "Jim"
@@ -30,15 +32,15 @@ namespace IdeaAPI.Controllers
                 new Idea()
                 {
                     Id = 3,
-                    Name = "New phone triage",
+                    Name = "Implement Automated Testing",
                     Description = "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce accumsan quis justo quis hendrerit. Curabitur a ante neque. Fusce nec mauris sodales, auctor sem at, luctus eros. Praesent aliquam nibh neque. Duis ut suscipit justo, id consectetur orci. Curabitur ultricies nunc eu enim dignissim, sed laoreet odio blandit.",
                     Status = "Mind Mapped",
-                    Owner = "Lance"
+                    Owner = "Jim"
                 },
                 new Idea()
                 {
                     Id = 4,
-                    Name = "Implement containerization",
+                    Name = "Improve CI/CD",
                     Description = "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce accumsan quis justo quis hendrerit. Curabitur a ante neque. Fusce nec mauris sodales, auctor sem at, luctus eros. Praesent aliquam nibh neque. Duis ut suscipit justo, id consectetur orci. Curabitur ultricies nunc eu enim dignissim, sed laoreet odio blandit.",
                     Status = "POC",
                     Owner = "Dave"
@@ -46,7 +48,7 @@ namespace IdeaAPI.Controllers
                 new Idea()
                 {
                     Id = 5,
-                    Name = "Migrate to oauth accounts",
+                    Name = "Modify Change Control Process",
                     Description = "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce accumsan quis justo quis hendrerit. Curabitur a ante neque. Fusce nec mauris sodales, auctor sem at, luctus eros. Praesent aliquam nibh neque. Duis ut suscipit justo, id consectetur orci. Curabitur ultricies nunc eu enim dignissim, sed laoreet odio blandit.",
                     Status = "Exploratory",
                     Owner = "Larry"
@@ -76,20 +78,20 @@ namespace IdeaAPI.Controllers
 
         // POST api/values
         [HttpPost]
-        public IActionResult Post(Idea newIdea)
+        public IActionResult Post([FromBody]Idea newIdea)
         {
             var newMaxId = ideas.OrderByDescending(x => x.Id).FirstOrDefault().Id + 1;
-
+            
             newIdea.Id = newMaxId;
             ideas.Add(newIdea);
-            return CreatedAtRoute("Get", new { id = newIdea.Id }, newIdea);
+            return CreatedAtAction("Get", new { id = newIdea.Id }, newIdea);
         }
 
         // PUT api/values/5
         [HttpPut("{id}")]
-        public IActionResult Put(Idea updateIdea)
+        public IActionResult Put(int id, [FromForm]Idea updateIdea)
         {
-            var idea = ideas.FirstOrDefault(x => x.Id == updateIdea.Id);
+            var idea = ideas.FirstOrDefault(x => x.Id == id);
             if(idea == null)
             {
                 return NotFound();
@@ -100,7 +102,7 @@ namespace IdeaAPI.Controllers
             idea.Status = updateIdea.Status;
             idea.Description = updateIdea.Description;
 
-            return Ok(updateIdea);
+            return NoContent();
         }
 
         // DELETE api/values/5
