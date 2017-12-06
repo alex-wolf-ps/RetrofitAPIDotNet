@@ -13,7 +13,7 @@ namespace IdeaAPI.Controllers
     {
         public IActionResult Get()
         {
-            var message = "This message was retrieved from the server.";
+            var message = "Thanks for visiting the app! Our next hackathon is scheduled for the end of Q3. We hope to see you there, be sure to add your ideas to the app.";
             return Json(message);
         }
     }
